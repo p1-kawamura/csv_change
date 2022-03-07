@@ -41,7 +41,7 @@ def csv_import(request):
     if 'csv2' in request.FILES:
 
         #------読込-------
-        data = io.TextIOWrapper(request.FILES['csv2'].file)
+        data = io.TextIOWrapper(request.FILES['csv2'].file , encoding="shift-jis")
         csv_content = csv.reader(data)
         header=next(csv_content)
 
