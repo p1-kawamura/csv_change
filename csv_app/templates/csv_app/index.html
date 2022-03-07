@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <title>plac6</title>
+
+</head>
+<body>
+    <div class="container mt-5" style="width: 70%">
+
+        <h3>■ 発注用CSV変換</h3>
+
+        {% for message in  messages %}
+            {% if forloop.first %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                    <p><div class="alert alert-success" role="alert">{{message}}</div></p>
+                {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                    <p><div class="alert alert-warning" role="alert">{{message}}</div></p>
+                {% else %}
+                    <p><div class="alert alert-danger" role="alert">{{message}}</div></p>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <!-- マスター -->
+        <!-- <p>マスターCSV</p>
+        <form action="{% url 'master' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="csv">
+            <button type="submit">送信</button>
+        </form>
+        <hr> -->
+
+        <!-- インポート -->
+        <br>
+        <form action="{% url 'csv_import' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="formFile" class="form-label">※対応メーカー：TOMS / CAB / フェリック / ボンマックス</label>
+                <input class="form-control form-control-lg" type="file" id="formFile" name="csv2">
+            </div>
+            <p><button class="btn btn-primary" type="submit">
+                {% if reset %}
+                リセット
+                {% else %}
+                変換
+                {% endif %}
+            </button></p>
+        </form>
+        <hr>
+        <p>対象ファイル：{{filename}}</p>
+        <p>変換形式：{{maker}}</p>
+        <p>見積番号：{{mitsumori}}</p>
+        <table class="table table-bordered">
+            <tr>
+                <th style="text-align: center;">商品詳細</th>
+                <th style="text-align: center;">数量</th>
+                <th style="text-align: center;">登録SKU</th>
+            </tr>
+            {% for key,value in dict.items %}            
+            <tr>
+                <td>{{value.hinmei}}</td>
+                <td style="text-align: center;">{{value.num}}</td>
+                <td style="text-align: center;">{{value.sku}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+
+        <!-- CSVダウンロード -->
+        {% if reset %}
+        <script>location.href="{% url 'csv_export' %}";</script>
+        {% endif %}
+
+    </div>
+    
+</body>
+</html>
