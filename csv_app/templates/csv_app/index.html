@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    
+
     <title>発注CSV変換</title>
 
 </head>
@@ -18,10 +18,13 @@
             {% if forloop.first %}
                 {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
                     <p><div class="alert alert-success" role="alert">{{message}}</div></p>
+                    <br>
                 {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-                    <p><div class="alert alert-warning" role="alert">{{message}}</div></p>
+                    <p><div style="color: red;">{{message}}</div></p>
+                    <!--<p><div class="alert alert-warning" role="alert">{{message}}</div></p>-->
                 {% else %}
                     <p><div class="alert alert-danger" role="alert">{{message}}</div></p>
+                    <br>
                 {% endif %}
             {% endif %}
         {% endfor %}
@@ -36,7 +39,6 @@
         <hr> -->
 
         <!-- インポート -->
-        <br>
         <form action="{% url 'csv_import' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
@@ -61,7 +63,7 @@
                 <th style="text-align: center;">数量</th>
                 <th style="text-align: center;">登録SKU</th>
             </tr>
-            {% for key,value in dict.items %}            
+            {% for key,value in dict.items %}
             <tr>
                 <td>{{value.hinmei}}</td>
                 <td style="text-align: center;">{{value.num}}</td>
@@ -77,6 +79,6 @@
         {% endif %}
 
     </div>
-    
+
 </body>
 </html>
