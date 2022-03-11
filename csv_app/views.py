@@ -38,6 +38,7 @@ def master(request):
 
 
 def csv_import(request):
+
     if 'csv2' in request.FILES:
 
         #------読込-------
@@ -46,6 +47,8 @@ def csv_import(request):
         header=next(csv_content)
 
         csv_list=list(csv_content)
+
+        select_maker=request.POST["メーカー"]
 
 
         #------HTMLへ------
@@ -67,7 +70,7 @@ def csv_import(request):
         file=request.FILES['csv2']
         filename=str(file)
 
-        if "キャブ" in filename:
+        if select_maker == "キャブ":
             maker="CAB"
             ex_csv=[]
 
@@ -82,7 +85,7 @@ def csv_import(request):
                 ex_csv.append(a)
 
 
-        elif "トムス" in filename:
+        elif select_maker == "トムス":
             maker="TOMS"
             ex_csv=[["品番","カラーコード","サイズコード","数量","OPP袋同送数","備考","お客様注文Ｎｏ"]]
 
@@ -100,7 +103,7 @@ def csv_import(request):
                 ex_csv.append(a)
 
 
-        elif "フェリック" in filename:
+        elif select_maker == "フェリック":
             maker="フェリック"
             ex_csv=[]
 
@@ -109,7 +112,7 @@ def csv_import(request):
                 ex_csv.append(a)
 
 
-        elif "ボンマックス" in filename:
+        elif select_maker == "ボンマックス":
             maker="ボンマックス"
             ex_csv=[["品番","カラー","サイズ","個数","明細摘要"]]
 

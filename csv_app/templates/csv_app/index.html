@@ -45,13 +45,25 @@
                 <label for="formFile" class="form-label">※対応メーカー：TOMS / CAB / フェリック / ボンマックス</label>
                 <input class="form-control form-control-lg" type="file" id="formFile" name="csv2">
             </div>
-            <p><button class="btn btn-primary" type="submit">
+            <div>
+                <label for="メーカー">メーカー：</label>
+                <select name="メーカー" id="メーカー">
+                    <option value="トムス">TOMS</option>
+                    <option value="キャブ">CAB</option>
+                    <option value="フェリック">フェリック</option>
+                    <option value="ボンマックス">ボンマックス</option>
+                </select>
+            </div>
+            <br>
+            <div>
+                <button class="btn btn-primary" type="submit">
                 {% if reset %}
                 リセット
                 {% else %}
                 変換
                 {% endif %}
-            </button></p>
+                </button>
+            </div>
         </form>
         <hr>
         <p>対象ファイル：{{filename}}</p>
