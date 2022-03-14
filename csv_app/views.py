@@ -98,7 +98,7 @@ def csv_import(request):
                 a.append(item.size_no)
                 a.append(line[6])
                 a.append("")
-                a.append(line[11])
+                a.append(line[11][:20])
                 a.append(line[7])
                 ex_csv.append(a)
 
