@@ -76,7 +76,7 @@ def csv_import(request):
 
             for line in csv_list:
                 a=[]
-                item=Master.objects.get(jan=line[8]+" ")
+                item=Master.objects.get(jan__contains=line[8])
 
                 a.append(item.hinban)
                 a.append(item.color_no)
