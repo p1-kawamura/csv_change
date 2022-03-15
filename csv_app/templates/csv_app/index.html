@@ -8,11 +8,20 @@
 
     <title>発注CSV変換</title>
 
+    <style>
+        .title1{
+            text-shadow:1.1px 1.1px #808080;
+        }
+    </style>
+
 </head>
 <body>
     <div class="container mt-5" style="width: 70%">
 
-        <h3>■ 発注用CSV変換</h3>
+        <div class="row">
+            <div class="col"><h3 class="title1">■ メーカー発注用_CSV変換</h3></div>
+            <div class="col" style="text-align: right;"><a href="{% url 'master_kanri' %}">マスタ管理</a></div>
+        </div>
 
         {% for message in  messages %}
             {% if forloop.first %}

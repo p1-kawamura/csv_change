@@ -5,36 +5,12 @@ from django.http import HttpResponse
 from .models import Master
 import urllib.parse
 from django.contrib import messages
+from .forms import Masterform
 
 
 def index(request):
     messages.warning(request,"変換するCSVを選択してください。")
     return render(request,"csv_app/index.html")
-
-def master(request):
-    if 'csv' in request.FILES:
-        data = io.TextIOWrapper(request.FILES['csv'].file)
-        csv_content = csv.reader(data)
-
-        header =next(csv_content) #タイトルを読み飛ばす
-
-        for i in csv_content:
-            Master.objects.update_or_create(
-                jan = i[7],
-                defaults={
-                    "brand": i[0],
-                    "hinban": i[1],
-                    "hinmei": i[2],
-                    "color_no": i[3],
-                    "color_name": i[4],
-                    "size_no": i[5],
-                    "size_name": i[6],
-                    "jan": i[7],
-                }  
-            )
-        return redirect('index')
-    else:
-        return redirect('index')
 
 
 def csv_import(request):
@@ -158,3 +134,51 @@ def csv_export(request):
     for line in ex_csv:
         writer.writerow(line)
     return response
+
+
+def master_kanri(request):
+    form2 = Masterform()
+    return render(request,"csv_app/master.html",{"form2":form2})
+
+
+
+def master(request):
+    if 'csv' in request.FILES:
+        data = io.TextIOWrapper(request.FILES['csv'].file)
+        csv_content = csv.reader(data)
+
+        header =next(csv_content) #タイトルを読み飛ばす
+
+        for i in csv_content:
+            Master.objects.update_or_create(
+                jan = i[7],
+                defaults={
+                    "brand": i[0],
+                    "hinban": i[1],
+                    "hinmei": i[2],
+                    "color_no": i[3],
+                    "color_name": i[4],
+                    "size_no": i[5],
+                    "size_name": i[6],
+                    "jan": i[7],
+                }  
+            )
+        messages.success(request,"マスタCSVの読み込みが完了しました！")
+        return redirect('master_kanri')
+    else:
+        return redirect('master_kanri')
+
+
+def master2(request):
+    jan=request.POST["jan"]
+    jan.strip()
+    try:
+        ins=Master.objects.get(jan__contains=jan)
+        form=Masterform(instance=ins)
+        message="JANコードが存在しています。更新を行ってください。"
+        return render(request,"csv_app/master.html",{"form2":form,"message":message})
+    except:
+        initial_dict = {"jan":jan,}
+        form = Masterform(request.GET or None, initial=initial_dict)
+        message="存在しないJANコードです。新規登録を行ってください。"
+        return render(request,"csv_app/master.html",{"form2":form,"message":message})
