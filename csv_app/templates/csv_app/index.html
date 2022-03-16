@@ -16,7 +16,7 @@
 
 </head>
 <body>
-    <div class="container mt-5" style="width: 70%">
+    <div class="container mt-5 bt-5" style="width: 70%">
 
         <div class="row">
             <div class="col"><h3 class="title1">■ メーカー発注用_CSV変換</h3></div>
@@ -37,15 +37,6 @@
                 {% endif %}
             {% endif %}
         {% endfor %}
-
-        <!-- マスター -->
-        <!-- <p>マスターCSV</p>
-        <form action="{% url 'master' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="csv">
-            <button type="submit">送信</button>
-        </form>
-        <hr> -->
 
         <!-- インポート -->
         <form action="{% url 'csv_import' %}" method="post" enctype="multipart/form-data">
@@ -70,16 +61,6 @@
                 {% endif %}
                 </button>
             </div>
-            <!-- <br>
-            <div>
-                <button class="btn btn-primary" type="submit">
-                {% if reset %}
-                リセット
-                {% else %}
-                変換
-                {% endif %}
-                </button>
-            </div> -->
         </form>
         <hr>
         <p>対象ファイル：{{filename}}</p>

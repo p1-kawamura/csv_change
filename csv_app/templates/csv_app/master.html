@@ -48,11 +48,21 @@
     <div class="container mt-5 mb-5">
         <div style="text-align: right;"><a href="{% url 'index' %}">HOME</a></div>
         <div class="back1">
-            <h1>マスタ管理（TOMS / CAB）</h1>
-            <div class="back2">
+            <h1>マスタ管理（CAB）</h1>
+            <!-- CSV方式 -->
+            <div class="back2">               
                 <h2>CSVインポート</h2>
                 <hr>
-                <form action="" method="post" enctype="multipart/form-data">
+                {% for message in  messages %}
+                    {% if forloop.first %}
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                            <p><div class="alert alert-success" role="alert">{{message}}</div></p>
+                        {% else %}
+                            <p><div class="alert alert-danger" role="alert">{{message}}</div></p>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                <form action="{% url 'master' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                     <div class="col-8"><input class="form-control form-control" type="file" name="csv"></div>
@@ -60,29 +70,43 @@
                     </div>
                 </form>
             </div>
-            <div class="back2 mt-3">
+            <!-- 手動方式-->
+            <div class="back2 mt-4">
                 <h2>手動登録/修正</h2>
-                <hr>
-                <!-- JANコードの確認 -->
-                <div class="row" style="margin-left: 5px;">
+                <hr>              
+                <div style="margin-left: 5px;">
+
                     <form action="{% url 'master2' %}" method="post" class="border border-secondary border-2" style="padding: 20px;width: 70%;">
                         {% csrf_token %}
                         <label for="jan">JANコードを入力してください：</label>
                         <input type="text" name="jan" id="jan">
                         <button type="submit">確認</button>
                     </form>
+
                     
-                    <!-- 入力 -->
-                    <div class="form1 mt-2">
-                        <p style="color: red;">{{message}}</p>
-                        <form action="" method="post" enctype="multipart/form-data">
+                    <div class="form1 mt-3">
+                        {% if message %}
+                        <p class="mt-2" style="color: red;">{{message}}</p>
+                        {% endif %}
+                        <form action="{% url 'master3' %}" method="post">
                             {% csrf_token %}
-                            {{form2.as_p}}
+                            <p><label>JANコード：</label>{{form2.jan}}</p>
+
+                            <p><label>品番：</label>{{form2.hinban}}
+                                <label>型番：</label>{{form2.kataban}}</p>
+
+                            
+                            
+                            
                             <button class="btn btn-primary" type="submit">登録</button>
                         </form>
                         <div class="reset_btn">
                             <a href="{% url 'master_kanri' %}"><button class="btn btn-secondary">リセット</button></a>
                         </div>
+
+                        <form action="">
+                            {{form3.as_p}}
+                        </form>
                     </div>
       
 

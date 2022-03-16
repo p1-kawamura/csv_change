@@ -1,15 +1,13 @@
 from django.forms import ModelForm
 from .models import Master
+from django import forms
 
 class Masterform(ModelForm):
     class Meta:
         model=Master
-        fields=[
-            "brand",
-            "hinban",
-            "hinmei",
-            "color_no",
-            "color_name",
-            "size_no",
-            "size_name",
-            "jan",]
+        fields=["jan","hinban","kataban",]
+
+
+
+class Masterform2(forms.Form):
+    hinban=forms.CharField(label="品番", widget=forms.Textarea(attrs={'cols': '5', 'rows': '1'}))
