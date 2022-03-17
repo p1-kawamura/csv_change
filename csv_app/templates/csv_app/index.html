@@ -20,7 +20,7 @@
 
         <div class="row">
             <div class="col"><h3 class="title1">■ メーカー発注用_CSV変換</h3></div>
-            <div class="col" style="text-align: right;"><a href="{% url 'master_kanri' %}">マスタ管理</a></div>
+            <div class="col" style="text-align: right;"><a href="{% url 'master_kanri' %}" target="_blank">マスタ管理</a></div>
         </div>
 
         {% for message in  messages %}
@@ -70,20 +70,24 @@
             <tr>
                 <th style="text-align: center;">商品詳細</th>
                 <th style="text-align: center;">数量</th>
-                <th style="text-align: center;">登録SKU</th>
+                <th style="text-align: center;">発注SKU</th>
             </tr>
             {% for key,value in dict.items %}
-            <tr>
-                <td>{{value.hinmei}}</td>
-                <td style="text-align: center;">{{value.num}}</td>
-                <td style="text-align: center;">{{value.sku}}</td>
-            </tr>
+                {% if value.sku in err %}
+                <tr style="background: lightcoral;">
+                {% else %}
+                <tr>
+                {% endif %}
+                    <td>{{value.hinmei}}</td>
+                    <td style="text-align: center;">{{value.num}}</td>
+                    <td style="text-align: center;">{{value.sku}}</td>
+                </tr>
             {% endfor %}
         </table>
 
 
         <!-- CSVダウンロード -->
-        {% if reset %}
+        {% if reset == "OK" %}
         <script>location.href="{% url 'csv_export' %}";</script>
         {% endif %}
 

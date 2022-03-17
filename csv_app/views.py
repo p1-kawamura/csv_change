@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from .models import Master
 import urllib.parse
 from django.contrib import messages
-from .forms import Masterform,Masterform2
+from .forms import Masterform
 
 
 def index(request):
@@ -46,15 +46,27 @@ def csv_import(request):
         file=request.FILES['csv2']
         filename=str(file)
 
+        #--- エラー表示用 ---
+        flag=True
+        err=[]
+
         if select_maker == "キャブ":
             maker="CAB"
             ex_csv=[]
-
+ 
             for line in csv_list:
-                item=Master.objects.get(jan=line[8])
-                a=[str(item.hinban)+"0"+str(item.kataban),line[3],line[5],line[6]]
-                ex_csv.append(a)
+                if len(list(Master.objects.filter(jan=line[8]))) == 0:
+                    err.append(line[8])
+                    flag=False
 
+            if flag == True:
+                for line in csv_list:
+                    item=Master.objects.get(jan=line[8])
+                    a=[str(item.hinban)+"0"+str(item.kataban),line[3],line[5],line[6]]
+                    ex_csv.append(a)
+                reset="OK"
+                messages.success(request,"変換後のCSVをダウンロードしました！")
+                
 
         elif select_maker == "トムス":
             maker="TOMS"
@@ -70,6 +82,8 @@ def csv_import(request):
                 a=[hinban,line[3],line[5],line[6],"",line[11][:20],line[7]]
                 ex_csv.append(a)
 
+            reset="OK"
+            messages.success(request,"変換後のCSVをダウンロードしました！")
 
         elif select_maker == "フェリック":
             maker="フェリック"
@@ -78,6 +92,9 @@ def csv_import(request):
             for line in csv_list:
                 a=[line[0],line[3],line[5],line[6]]
                 ex_csv.append(a)
+
+            reset="OK"
+            messages.success(request,"変換後のCSVをダウンロードしました！")
 
 
         elif select_maker == "ボンマックス":
@@ -88,21 +105,41 @@ def csv_import(request):
                 a=[line[0],line[3],line[5],line[6],line[11][:20]]
                 ex_csv.append(a)
 
+            reset="OK"
+            messages.success(request,"変換後のCSVをダウンロードしました！")
+
         else:
             messages.error(request,"対応していないメーカーのCSVが選択されています！")
             return render(request,"csv_app/index.html",{"filename":filename})
 
+        #-----------------
+        #最終結果
+        #-----------------
+        if flag == True:
+            reset="OK"
+            messages.success(request,"変換後のCSVをダウンロードしました！")
+
+            #------セッション-----
+            request.session["csv_list"]={"file":str(file),"csv":ex_csv}
+
+        else:
+            print(err)
+            reset="NO"
+            messages.error(request,"マスタに登録されていない商品が含まれています！")
 
 
-
-        reset="OK"
-        messages.success(request,"変換後のCSVをダウンロードしました！")
-
-        #------セッション-----
-        request.session["csv_list"]={"file":str(file),"csv":ex_csv}
+        
 
         return render(request,"csv_app/index.html",
-            {"dict":dict,"mitsumori":mitsumori,"maker":maker,"reset":reset,"filename":filename})
+            {
+            "dict":dict,
+            "mitsumori":mitsumori,
+            "maker":maker,
+            "reset":reset,
+            "filename":filename,
+            "err":err,
+            }
+            )
 
     
     else:
@@ -130,8 +167,7 @@ def csv_export(request):
 
 def master_kanri(request):
     form2 = Masterform()
-    form3=Masterform2()
-    return render(request,"csv_app/master.html",{"form2":form2,"form3":form3})
+    return render(request,"csv_app/master.html",{"form2":form2})
 
 
 
@@ -166,23 +202,17 @@ def master(request):
         return redirect('master_kanri')
 
 
-# ------------------------------------------------------------------
-# フォームに初期値を設定する方法
-# initial_dict = {"jan":jan,}
-# form = Masterform(request.GET or None, initial=initial_dict)
-# ------------------------------------------------------------------
-
-
 def master2(request):
     jan=request.POST["jan"]
     try:
         ins=Master.objects.get(jan=jan)
-        form2=Masterform(request.POST,instance=ins)
+        initial_dict = {"jan":jan,"hinban":ins.hinban,"kataban":ins.kataban}
+        form2 = Masterform(initial=initial_dict)
         message="既に存在しているJANコードです。内容を変更しますか？"
         return render(request,"csv_app/master.html",{"message":message,"form2":form2})
     except:
         initial_dict = {"jan":jan,}
-        form2 = Masterform(request.GET or None, initial=initial_dict)
+        form2 = Masterform(initial=initial_dict)
         message="使用可能なJANコードです。新規登録を行ってください。"
         return render(request,"csv_app/master.html",{"message":message,"form2":form2})
 
@@ -190,18 +220,16 @@ def master2(request):
 
 def master3(request):
     jan=request.POST["jan"]
-    try:
-        ins=Master.objects.get(jan=jan)
-        form=Masterform(request.POST,instance=ins)
-        if form.is_valid():
-            form.save()
-        message="同じJANコード:" + jan + " で内容を更新しました！"
+    hinban=request.POST["hinban"]
+    kataban=request.POST["kataban"]
+
+    if len(list(Master.objects.filter(jan=jan)))>0:
+        Master.objects.filter(jan=jan).update(hinban=hinban,kataban=kataban)
+        message="内容を更新しました！"
         form2=Masterform()
         return render(request,"csv_app/master.html",{"message":message,"form2":form2})
-    except:
-        form = Masterform(request.POST)
-        if form.is_valid():
-            form.save()
+    else:
+        Master(jan=jan,hinban=hinban,kataban=kataban).save()
         message="新規登録が完了しました！"
         form2=Masterform()
         return render(request,"csv_app/master.html",{"message":message,"form2":form2})
