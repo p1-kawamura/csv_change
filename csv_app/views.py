@@ -64,8 +64,6 @@ def csv_import(request):
                     item=Master.objects.get(jan=line[8])
                     a=[str(item.hinban)+"0"+str(item.kataban),line[3],line[5],line[6]]
                     ex_csv.append(a)
-                reset="OK"
-                messages.success(request,"変換後のCSVをダウンロードしました！")
                 
 
         elif select_maker == "トムス":
@@ -82,8 +80,6 @@ def csv_import(request):
                 a=[hinban,line[3],line[5],line[6],"",line[11][:20],line[7]]
                 ex_csv.append(a)
 
-            reset="OK"
-            messages.success(request,"変換後のCSVをダウンロードしました！")
 
         elif select_maker == "フェリック":
             maker="フェリック"
@@ -92,9 +88,6 @@ def csv_import(request):
             for line in csv_list:
                 a=[line[0],line[3],line[5],line[6]]
                 ex_csv.append(a)
-
-            reset="OK"
-            messages.success(request,"変換後のCSVをダウンロードしました！")
 
 
         elif select_maker == "ボンマックス":
@@ -105,8 +98,6 @@ def csv_import(request):
                 a=[line[0],line[3],line[5],line[6],line[11][:20]]
                 ex_csv.append(a)
 
-            reset="OK"
-            messages.success(request,"変換後のCSVをダウンロードしました！")
 
         else:
             messages.error(request,"対応していないメーカーのCSVが選択されています！")
