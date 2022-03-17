@@ -202,6 +202,7 @@ def master(request):
         return redirect('master_kanri')
 
 
+
 def master2(request):
     jan=request.POST["jan"]
     try:
