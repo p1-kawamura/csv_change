@@ -12,6 +12,18 @@
         .title1{
             text-shadow:1.1px 1.1px #808080;
         }
+        .flex-all {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 1em;
+        }
+        .flex{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding-right: 1em;
+        }
     </style>
 
 </head>
@@ -45,21 +57,25 @@
                 <label for="formFile" class="form-label">※対応メーカー：TOMS / CAB / フェリック / ボンマックス</label>
                 <input class="form-control form-control-lg" type="file" id="formFile" name="csv2">
             </div>
-            <div>
-                <label for="メーカー">メーカー：</label>
-                <select name="メーカー" id="メーカー">
-                    <option value="トムス">TOMS</option>
-                    <option value="キャブ">CAB</option>
-                    <option value="フェリック">フェリック</option>
-                    <option value="ボンマックス">ボンマックス</option>
-                </select>
-                　<button class="btn btn-primary" type="submit">
-                {% if reset %}
-                リセット
-                {% else %}
-                変換
-                {% endif %}
-                </button>
+            <div class="flex-all">
+                <div class="flex">メーカー：</div>
+                <div class="flex" style="margin-left: -10px;">
+                    <select name="メーカー" class="form-select" aria-label="Default select example" style="width: 130px;">
+                        <option value="トムス">TOMS</option>
+                        <option value="キャブ">CAB</option>
+                        <option value="フェリック">フェリック</option>
+                        <option value="ボンマックス">ボンマックス</option>
+                    </select>
+                </div>
+                <div class="flex">
+                    <button class="btn btn-primary" type="submit">
+                    {% if reset %}
+                    リセット
+                    {% else %}
+                    変換
+                    {% endif %}
+                    </button>
+                </div>
             </div>
         </form>
         <hr>
