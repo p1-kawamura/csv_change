@@ -97,6 +97,7 @@ def csv_import(request):
             for line in csv_list:
                 a=[line[0],line[3],line[5],line[6],line[11][:20]]
                 ex_csv.append(a)
+                
 
 
         else:
