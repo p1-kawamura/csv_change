@@ -164,7 +164,7 @@ def master_kanri(request):
 
 def master(request):
     if 'csv' in request.FILES:
-        data = io.TextIOWrapper(request.FILES['csv'].file)
+        data = io.TextIOWrapper(request.FILES['csv'].file, encoding="cp932")
         csv_content = csv.reader(data)
 
         csv_list=list(csv_content)
