@@ -114,7 +114,6 @@ def csv_import(request):
             request.session["csv_list"]={"file":str(file),"csv":ex_csv}
 
         else:
-            print(err)
             reset="NO"
             messages.error(request,"マスタに登録されていない商品が含まれています！")
 
