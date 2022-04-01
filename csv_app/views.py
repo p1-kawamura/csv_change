@@ -24,8 +24,6 @@ def csv_import(request):
 
         csv_list=list(csv_content)
 
-        select_maker=request.POST["メーカー"]
-
 
         #------HTMLへ------
         dict={}
@@ -46,11 +44,17 @@ def csv_import(request):
         file=request.FILES['csv2']
         filename=str(file)
 
+        if filename.split("_")[0]=="":
+            select_maker=request.POST["メーカー"]
+        else:
+            select_maker=filename.split("_")[0]
+        
+
         #--- エラー表示用 ---
         flag=True
         err=[]
 
-        if select_maker == "キャブ":
+        if select_maker=="キャブ㈱":
             maker="CAB"
             ex_csv=[]
  
@@ -66,7 +70,7 @@ def csv_import(request):
                     ex_csv.append(a)
                 
 
-        elif select_maker == "トムス":
+        elif select_maker == "トムス㈱":
             maker="TOMS"
             ex_csv=[["品番","カラーコード","サイズコード","数量","OPP袋同送数","備考","お客様注文Ｎｏ"]]
 
@@ -81,7 +85,7 @@ def csv_import(request):
                 ex_csv.append(a)
 
 
-        elif select_maker == "フェリック":
+        elif select_maker == "フェリック㈱":
             maker="フェリック"
             ex_csv=[]
 
@@ -90,7 +94,7 @@ def csv_import(request):
                 ex_csv.append(a)
 
 
-        elif select_maker == "ボンマックス":
+        elif select_maker == "㈱ボンマックス":
             maker="ボンマックス"
             ex_csv=[["品番","カラー","サイズ","個数","明細摘要"]]
 

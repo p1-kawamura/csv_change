@@ -58,26 +58,53 @@
                 <input class="form-control form-control-lg" type="file" id="formFile" name="csv2">
             </div>
             <div class="flex-all">
-                <div class="flex">メーカー：</div>
-                <div class="flex" style="margin-left: -10px;">
+                <div class="flex" id="sentaku">ファイル未選択：</div>
+                <div class="flex" id="maker_list" style="margin-left: -10px;">
                     <select name="メーカー" class="form-select" aria-label="Default select example" style="width: 130px;">
-                        <option value="トムス">TOMS</option>
-                        <option value="キャブ">CAB</option>
-                        <option value="フェリック">フェリック</option>
-                        <option value="ボンマックス">ボンマックス</option>
+                        <option value="トムス㈱">TOMS</option>
+                        <option value="キャブ㈱">CAB</option>
+                        <option value="フェリック㈱">フェリック</option>
+                        <option value="㈱ボンマックス">ボンマックス</option>
                     </select>
                 </div>
                 <div class="flex">
-                    <button class="btn btn-primary" type="submit">
-                    {% if reset %}
-                    リセット
-                    {% else %}
-                    変換
-                    {% endif %}
-                    </button>
+                    <button class="btn btn-primary" type="submit">変換</button>
                 </div>
             </div>
         </form>
+
+        <!-- JavaScript -->
+        <script>
+            document.getElementById("maker_list").style.display="none";
+            function inputChange(){
+                var files = fileBox.files;
+                var filename = files[0].name;
+                var maker = filename.split("_");
+                var maker_list = document.getElementById("maker_list");
+                var sentaku = document.getElementById("sentaku");
+                var kekka
+
+                if (maker[0].length==0){
+                    //手動
+                    console.log(maker[0]);
+                    maker_list.style.display="block";
+                    kekka="手動選択：";
+                }else {
+                    // 自動
+                    console.log("no");                   
+                    maker_list.style.display="none";
+                    kekka="自動判別：";
+                }
+                
+                sentaku.innerText=kekka;
+                
+            }
+            var fileBox = document.getElementById('formFile');
+            fileBox.addEventListener('change', inputChange);
+        </script>
+
+
+        <!-- ここまで -->
         <hr>
         <p>対象ファイル：{{filename}}</p>
         <p>変換形式：{{maker}}</p>
