@@ -43,8 +43,9 @@ def csv_import(request):
         #------出力項目準備(リストの中身)------
         file=request.FILES['csv2']
         filename=str(file)
+        maker_list=["キャブ(株)","トムス(株)","フェリック(株)","(株)ボンマックス"]
 
-        if filename.split("_")[0]=="":
+        if not filename.split("_")[0] in maker_list:
             select_maker=request.POST["メーカー"]
         else:
             select_maker=filename.split("_")[0]
@@ -54,7 +55,7 @@ def csv_import(request):
         flag=True
         err=[]
 
-        if select_maker=="キャブ㈱":
+        if select_maker=="キャブ(株)":
             maker="CAB"
             ex_csv=[]
  
@@ -70,7 +71,7 @@ def csv_import(request):
                     ex_csv.append(a)
                 
 
-        elif select_maker == "トムス㈱":
+        elif select_maker == "トムス(株)":
             maker="TOMS"
             ex_csv=[["品番","カラーコード","サイズコード","数量","OPP袋同送数","備考","お客様注文Ｎｏ"]]
 
@@ -85,7 +86,7 @@ def csv_import(request):
                 ex_csv.append(a)
 
 
-        elif select_maker == "フェリック㈱":
+        elif select_maker == "フェリック(株)":
             maker="フェリック"
             ex_csv=[]
 
@@ -94,7 +95,7 @@ def csv_import(request):
                 ex_csv.append(a)
 
 
-        elif select_maker == "㈱ボンマックス":
+        elif select_maker == "(株)ボンマックス":
             maker="ボンマックス"
             ex_csv=[["品番","カラー","サイズ","個数","明細摘要"]]
 
@@ -103,10 +104,11 @@ def csv_import(request):
                 ex_csv.append(a)
                 
 
+        # else:
+        #     messages.error(request,"対応していないメーカーのCSVが選択されています！")
+        #     return render(request,"csv_app/index.html",{"filename":filename})
 
-        else:
-            messages.error(request,"対応していないメーカーのCSVが選択されています！")
-            return render(request,"csv_app/index.html",{"filename":filename})
+
 
         #-----------------
         #最終結果
