@@ -24,6 +24,21 @@
             align-items: center;
             padding-right: 1em;
         }
+        .syudou{
+            border-bottom: 2px solid rgb(232, 10, 10);
+            color:rgb(232, 10, 10);
+            padding:2px;
+            font-weight: bolder;
+        }
+        .zidou{
+            border-bottom: 2px solid rgb(54, 129, 54);
+            color:rgb(54, 129, 54);
+            padding:2px;
+            font-weight: bolder;
+        }
+        #maker_list {
+            padding-left: 10px;
+        }
     </style>
 
 </head>
@@ -58,7 +73,11 @@
                 <input class="form-control form-control-lg" type="file" id="formFile" name="csv2">
             </div>
             <div class="flex-all">
+
+
                 <div class="flex" id="sentaku">ファイル未選択：</div>
+
+
                 <div class="flex" id="maker_list" style="margin-left: -10px;">
                     <select name="メーカー" class="form-select" aria-label="Default select example" style="width: 130px;">
                         <option value="トムス(株)">TOMS</option>
@@ -88,14 +107,14 @@
                 if (list.includes(maker[0])){
                     // 自動                 
                     maker_list.style.display="none";
-                    kekka="自動判別：";                    
+                    kekka="<span class='zidou'>自動判別</span>";                    
                 } else {
                     //手動
                     maker_list.style.display="block";
-                    kekka="手動選択：";
+                    kekka="<span class='syudou'>手動選択</span>";
                 }
                 
-                sentaku.innerText=kekka;
+                sentaku.innerHTML=kekka;
                 
             }
             var fileBox = document.getElementById('formFile');
