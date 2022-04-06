@@ -52,20 +52,23 @@
             </div>
         </div>
 
+        <div id="mess">
         {% for message in  messages %}
             {% if forloop.first %}
                 {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
                     <p><div class="alert alert-success" role="alert">{{message}}</div></p>
-                    <br>
+                    
                 {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
                     <p><div style="color: red;">{{message}}</div></p>
+                    <br>
                     <!--<p><div class="alert alert-warning" role="alert">{{message}}</div></p>-->
                 {% else %}
                     <p><div class="alert alert-danger" role="alert">{{message}}</div></p>
-                    <br>
+                    
                 {% endif %}
             {% endif %}
         {% endfor %}
+        </div>
 
         <!-- インポート -->
         <form action="{% url 'csv_import' %}" method="post" enctype="multipart/form-data">
@@ -104,15 +107,23 @@
         <!-- JavaScript -->
         <script>
             document.getElementById("maker_list").style.display="none";
+            document.getElementById("mess").style.visibility="visible";
             function inputChange(){
                 var files = fileBox.files;
                 var filename = files[0].name;
                 var maker = filename.split("_");
                 var maker_list = document.getElementById("maker_list");
                 var sentaku = document.getElementById("sentaku");
+                var mess = document.getElementById("mess");
                 var kekka
                 var list=["トムス(株)","キャブ(株)","フェリック(株)","(株)ボンマックス","株式会社松栄シルク"]
 
+                // ファイルの有無
+                if (files.count != 0){
+                    mess.style.visibility="hidden";
+                }
+
+                // ファイル名から判断
                 if (list.includes(maker[0])){
                     // 自動                 
                     maker_list.style.display="none";
