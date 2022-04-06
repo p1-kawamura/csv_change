@@ -43,7 +43,7 @@ def csv_import(request):
         #------出力項目準備(リストの中身)------
         file=request.FILES['csv2']
         filename=str(file)
-        maker_list=["キャブ(株)","トムス(株)","フェリック(株)","(株)ボンマックス"]
+        maker_list=["キャブ(株)","トムス(株)","フェリック(株)","(株)ボンマックス","株式会社松栄シルク"]
 
         if not filename.split("_")[0] in maker_list:
             select_maker=request.POST["メーカー"]
@@ -102,7 +102,16 @@ def csv_import(request):
             for line in csv_list:
                 a=[line[0],line[3],line[5],line[6],line[11][:20]]
                 ex_csv.append(a)
-                
+
+
+        elif select_maker == "株式会社松栄シルク":
+            maker="松栄シルク"
+            ex_csv=[]
+
+            for line in csv_list:
+                a=[line[0],line[3],line[5],line[6]]
+                ex_csv.append(a)
+
 
         # else:
         #     messages.error(request,"対応していないメーカーのCSVが選択されています！")

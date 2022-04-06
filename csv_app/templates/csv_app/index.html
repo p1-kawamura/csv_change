@@ -47,7 +47,9 @@
 
         <div class="row">
             <div class="col"><h3 class="title1">■ メーカー発注用_CSV変換</h3></div>
-            <div class="col" style="text-align: right;"><a href="{% url 'master_kanri' %}" target="_blank">マスタ管理</a></div>
+            <div class="col" style="text-align: right;">
+                <a href="{% url 'master_kanri' %}" target="_blank"><button class="btn btn-secondary">マスタ管理</button></a>
+            </div>
         </div>
 
         {% for message in  messages %}
@@ -69,7 +71,13 @@
         <form action="{% url 'csv_import' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="formFile" class="form-label">※対応メーカー：TOMS / CAB / フェリック / ボンマックス</label>
+                <label for="formFile" class="form-label">※対応メーカー：
+                    <a href="https://shop.tomswear.com/front/app/common/login/" target="_blank">TOMS</a> / 
+                    <a href="https://cabclothing.jp/" target="_blank">CAB</a> / 
+                    <a href="http://felicol.asg-web.com/login/login.html" target="_blank">フェリック</a> / 
+                    <a href="https://www.lifemaxonline.com/login" target="_blank">ボンマックス</a> / 
+                    <a href="https://order.shoeisilk.com/mypage/login.php?transactionid=7e28dac516b0e3754f3db6c5cb3b103b3f40fd1a" target="_blank">松栄シルク</a>
+                </label>
                 <input class="form-control form-control-lg" type="file" id="formFile" name="csv2">
             </div>
             <div class="flex-all">
@@ -84,6 +92,7 @@
                         <option value="キャブ(株)">CAB</option>
                         <option value="フェリック(株)">フェリック</option>
                         <option value="(株)ボンマックス">ボンマックス</option>
+                        <option value="株式会社松栄シルク">松栄シルク</option>
                     </select>
                 </div>
                 <div class="flex">
@@ -102,7 +111,7 @@
                 var maker_list = document.getElementById("maker_list");
                 var sentaku = document.getElementById("sentaku");
                 var kekka
-                var list=["トムス(株)","キャブ(株)","フェリック(株)","(株)ボンマックス"]
+                var list=["トムス(株)","キャブ(株)","フェリック(株)","(株)ボンマックス","株式会社松栄シルク"]
 
                 if (list.includes(maker[0])){
                     // 自動                 
