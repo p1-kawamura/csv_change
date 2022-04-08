@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index,csv_import,csv_export,master_kanri,master,master2,master3
+from .views import index,csv_import,csv_export,master_kanri,master,master2,master3,trade_hinban,trade_kyoten
 
 urlpatterns = [
     path('', index, name="index"),
@@ -9,4 +9,6 @@ urlpatterns = [
     path('master_kanri/', master_kanri, name="master_kanri"),
     path('master2/', master2, name="master2"),
     path('master3/', master3, name="master3"),
+    path('trade_hinban/', trade_hinban, name="trade_hinban"),
+    path('trade_kyoten/', trade_kyoten, name="trade_kyoten"),
 ]

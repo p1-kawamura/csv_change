@@ -144,12 +144,12 @@
         <div class="back3 mt-5">
             <h1>2. トレードワークス</h1>
             <hr>
-            <!-- CSV方式 -->
+            <!-- CSV方式 品番 -->
             <div class="back2">               
-                <h2>CSVインポート</h2>
+                <h2>【品番】 CSVインポート</h2>
                 <hr>
                 <span style="color: red;">{{csv_message2}}</span>
-                <form action="{% url 'master' %}" method="post" enctype="multipart/form-data">
+                <form action="{% url 'trade_hinban' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                     <div class="col-8"><input class="form-control form-control" type="file" name="csv"></div>
@@ -157,7 +157,22 @@
                     </div>
                 </form>
             </div>
-            <!-- 手動方式-->
+
+            <!-- CSV方式 拠点 -->
+            <div class="back2">               
+                <h2>【拠点】 CSVインポート</h2>
+                <hr>
+                <span style="color: red;">{{csv_message3}}</span>
+                <form action="{% url 'trade_kyoten' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                    <div class="col-8"><input class="form-control form-control" type="file" name="csv"></div>
+                    <div class="col"><button class="btn btn-primary" type="submit">取込</button></div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 手動方式
             <div class="back2 mt-4">
                 <h2>手動登録 / 修正</h2>
                 <hr>              
@@ -202,7 +217,7 @@
                     </div>
       
                 </div>
-            </div>
+            </div> -->
 
         </div>
     </div>
