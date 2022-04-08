@@ -8,18 +8,25 @@
 
     <title>マスタ管理</title>
     <style>
+        .title1{
+            text-shadow:1.1px 1.1px #808080;
+        }
         .container{
             width: 800px;
         }
 
         .back1{
-            background: lavenderblush;
-            padding: 10px;
+            background: rgb(250, 209, 222);
+            padding: 10px 10px 20px 10px;
         }
         .back2{
             background: white;
             padding: 15px;
             margin-top: 10px;
+        }
+        .back3{
+            background: rgb(215, 248, 186);
+            padding: 10px 10px 20px 10px;
         }
         h1{ 
             font-size: 15pt;
@@ -61,23 +68,87 @@
 </head>
 <body>
     <div class="container mt-5 mb-5">
-        <div style="text-align: right;"><a href="javascript:;" onclick="window.close();">閉じる</a></div>
-        <div class="back1">
-            <h1>マスタ管理（CAB）</h1>
+        <div class="row">
+            <div class="col"><h3 class="title1">■ マスタ管理</h3></div>
+            <div class="col" style="text-align: right;">
+                <a href="javascript:;" onclick="window.close();">閉じる</a>
+            </div>
+        </div>
+        
+        <!-- CAB -->
+        <div class="back1 mt-3">
+            <h1>1. CAB</h1>
             <hr>
             <!-- CSV方式 -->
             <div class="back2">               
                 <h2>CSVインポート</h2>
                 <hr>
-                {% for message in  messages %}
-                    {% if forloop.first %}
-                        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                            <p><div class="alert alert-success" role="alert">{{message}}</div></p>
-                        {% else %}
-                            <p><div class="alert alert-danger" role="alert">{{message}}</div></p>
+                <span style="color: red;">{{csv_message}}</span>
+                <form action="{% url 'master' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                    <div class="col-8"><input class="form-control form-control" type="file" name="csv"></div>
+                    <div class="col"><button class="btn btn-primary" type="submit">取込</button></div>
+                    </div>
+                </form>
+            </div>
+            <!-- 手動方式-->
+            <div class="back2 mt-4">
+                <h2>手動登録 / 修正</h2>
+                <hr>              
+                <div style="margin-left: 5px;">
+
+                    <form action="{% url 'master2' %}" method="post" class="border border-secondary border-2" style="padding: 20px;width: 70%;">
+                        {% csrf_token %}
+                        <label for="jan">JANコードを入力してください：</label>
+                        <input type="text" name="jan" id="jan">
+                        <button type="submit">確認</button>
+                    </form>
+
+                    
+                    <div class="form1 mt-3">
+                        {% if message %}
+                        <p class="mt-2" style="color: red;">{{message}}</p>
                         {% endif %}
-                    {% endif %}
-                {% endfor %}
+
+                        <form action="{% url 'master3' %}" method="post">
+                            {% csrf_token %}
+                            <div class="flex-all">
+                                <div class="flex">
+                                    <div><label>JANコード:</label></div>
+                                    <div style="width: 170px;">{{form2.jan}}</div>
+                                </div>
+                                <div class="flex">
+                                    <div>品番:</div>
+                                    <div style="width: 80px;">{{form2.hinban}}</div>
+                                </div>
+                                <div class="flex">
+                                    <div>型番:</div>
+                                    <div style="width: 80px;">{{form2.kataban}}</div>
+                                </div>
+                            </div>
+                            <div style="margin-left: 15px;">
+                                <button class="btn btn-primary" type="submit">登録</button>
+                            </div>
+                        </form>
+                            <div class="reset_btn">
+                                <a href="{% url 'master_kanri' %}"><button class="btn btn-secondary">リセット</button></a>
+                            </div>
+                    </div>
+      
+                </div>
+            </div>
+        </div>
+
+        <!-- トレードワークス -->
+        <div class="back3 mt-5">
+            <h1>2. トレードワークス</h1>
+            <hr>
+            <!-- CSV方式 -->
+            <div class="back2">               
+                <h2>CSVインポート</h2>
+                <hr>
+                <span style="color: red;">{{csv_message2}}</span>
                 <form action="{% url 'master' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">

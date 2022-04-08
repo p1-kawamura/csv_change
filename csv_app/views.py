@@ -178,10 +178,12 @@ def master_kanri(request):
 
 
 def master(request):
+    form2 = Masterform()
+    
     if 'csv' in request.FILES:
         data = io.TextIOWrapper(request.FILES['csv'].file, encoding="cp932")
         csv_content = csv.reader(data)
-
+        
         csv_list=list(csv_content)
         if csv_list[0][4]=="SKU" and csv_list[0][5]=="品番" and csv_list[0][6]=="型番":
             
@@ -198,14 +200,17 @@ def master(request):
                         }  
                     )
                 h+=1   
-            messages.success(request,"マスタCSVの読み込みが完了しました！")
-            return redirect('master_kanri')
+
+            csv_message="マスタCSVの読み込みが完了しました！"
+            return render(request,"csv_app/master.html",{"csv_message":csv_message,"form2":form2})
+
         else:
-            messages.error(request,"マスタCSVの形式が違います！")
-            return redirect('master_kanri')
+            csv_message="マスタCSVの形式が違います！"
+            return render(request,"csv_app/master.html",{"csv_message":csv_message,"form2":form2})
+
     else:
-        messages.error(request,"CSVファイルが選択されていません！")
-        return redirect('master_kanri')
+        csv_message="CSVファイルが選択されていません！"
+        return render(request,"csv_app/master.html",{"csv_message":csv_message,"form2":form2})
 
 
 
