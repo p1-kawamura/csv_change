@@ -115,7 +115,8 @@ def csv_import(request):
 
         elif select_maker=="(株)トレードワークス":
             maker="トレードワークス"
-            ex_csv=[]
+            ex_csv=[["品番","数量","お届け先会社名","お届け先会社名カナ","部署名","お届け先名（姓）","お届け先名（名）",
+            "お届け先郵便番号","お届け先都道府県","お届け先住所1","お届け先住所2","お届け先電話番号","お客様注文番号","荷主名","荷主電話番号","備考"]]
             trade_flag1=True
             trade_flag2=True
 
@@ -155,7 +156,7 @@ def csv_import(request):
                         line[7], #注文番号
                         kakou_send.ninushi_name, #荷主名
                         kakou_send.ninushi_tel, #荷主電話
-                        line[11][:30], #備考
+                        line[7], #備考
                         ]
                     ex_csv.append(a)
 

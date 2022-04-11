@@ -73,7 +73,7 @@
         <!-- インポート -->
         <form action="{% url 'csv_import' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="mb-3">
+            <div class="mb-3" style="font-size: 130%;">
                 <label for="formFile" class="form-label">※対応メーカー：
                     <a href="https://shop.tomswear.com/front/app/common/login/" target="_blank">TOMS</a> / 
                     <a href="https://cabclothing.jp/" target="_blank">CAB</a> / 
