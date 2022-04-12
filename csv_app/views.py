@@ -8,6 +8,7 @@ from django.contrib import messages
 from .forms import Masterform
 
 
+
 def index(request):
     messages.warning(request,"変換するCSVを選択してください。")
     return render(request,"csv_app/index.html")
@@ -156,7 +157,7 @@ def csv_import(request):
                         line[7], #注文番号
                         kakou_send.ninushi_name, #荷主名
                         kakou_send.ninushi_tel, #荷主電話
-                        line[7], #備考
+                        "", #備考
                         ]
                     ex_csv.append(a)
 
