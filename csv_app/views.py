@@ -181,12 +181,13 @@ def csv_import(request):
             reset="NO"
             err_mess="マスタに登録されていない商品が含まれています！"
 
-            if trade_flag1 == False and trade_flag2 == True:
-                err_mess="マスタに登録されていない商品が含まれています！"
-            elif trade_flag1 == True and trade_flag2 == False:
-                err_mess="ファイル名に登録されていない加工場が含まれています！"
-            elif trade_flag1 == False and trade_flag2 == False:
-                err_mess="マスタに登録されていない商品が含まれています！ファイル名に登録されていない加工場が含まれています！"
+            if maker=="トレードワークス":
+                if trade_flag1 == False and trade_flag2 == True:
+                    err_mess="マスタに登録されていない商品が含まれています！"
+                elif trade_flag1 == True and trade_flag2 == False:
+                    err_mess="ファイル名に登録されていない加工場が含まれています！"
+                elif trade_flag1 == False and trade_flag2 == False:
+                    err_mess="マスタに登録されていない商品が含まれています！ファイル名に登録されていない加工場が含まれています！"
 
             messages.error(request,err_mess)
 
