@@ -6,6 +6,7 @@ from .models import Master,Trade_hinban,Trade_kyoten
 import urllib.parse
 from django.contrib import messages
 from .forms import Masterform
+from django.http import JsonResponse
 
 
 
@@ -384,3 +385,34 @@ def trade_kyoten(request):
     else:
         csv_message3="CSVファイルが選択されていません！"
         return render(request,"csv_app/master.html",{"csv_message3":csv_message3,"form2":form2})
+
+
+
+def trade_hinban_ajax(request):
+    jan=request.POST.get("trade_jan")
+    try:
+        item=Trade_hinban.objects.get(jan=jan)
+        d={
+            "hinban":item.hinban,
+            "comment":"既に存在しているJANコードです。内容を変更しますか？",
+            }
+    except:
+        d={
+            "hinban":"",
+            "comment":"使用可能なJANコードです。新規登録を行ってください。",
+            }
+    return JsonResponse(d)
+
+
+
+def trade_hinban2_ajax(request):
+    jan=request.POST.get("trade_jan")
+    hinban=request.POST.get("trade_hinban")
+    if len(list(Trade_hinban.objects.filter(jan=jan)))>0:
+        Trade_hinban.objects.filter(jan=jan).update(hinban=hinban)
+        d={"comment":"内容を更新しました！"}
+    else:
+        Trade_hinban(jan=jan,hinban=hinban).save()
+        d={"comment":"新規JANと品番を登録しました！"}
+    print(d)
+    return JsonResponse(d)

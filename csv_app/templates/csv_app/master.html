@@ -172,54 +172,118 @@
                 </form>
             </div>
 
-            <!-- 手動方式
+            <!-- 手動方式 -->
             <div class="back2 mt-4">
-                <h2>手動登録 / 修正</h2>
+                <h2>【品番】 手動登録 / 修正</h2>
                 <hr>              
                 <div style="margin-left: 5px;">
-
-                    <form action="{% url 'master2' %}" method="post" class="border border-secondary border-2" style="padding: 20px;width: 70%;">
-                        {% csrf_token %}
-                        <label for="jan">JANコードを入力してください：</label>
-                        <input type="text" name="jan" id="jan">
-                        <button type="submit">確認</button>
-                    </form>
-
                     
-                    <div class="form1 mt-3">
-                        {% if message %}
-                        <p class="mt-2" style="color: red;">{{message}}</p>
-                        {% endif %}
+                    <div class="form1 mt-3">                        
 
-                        <form action="{% url 'master3' %}" method="post">
-                            {% csrf_token %}
+                        <form id="trade_hinban_ajax">                           
+                            <div id="trade_hinban_comment"></div>
                             <div class="flex-all">
                                 <div class="flex">
-                                    <div><label>JANコード:</label></div>
-                                    <div style="width: 170px;">{{form2.jan}}</div>
+                                    <label for="trade_jan">JANコード:</label>
+                                    <input class="form-control" type="text" id="trade_jan" style="width: 170px;margin-left: 10px;">
                                 </div>
                                 <div class="flex">
-                                    <div>品番:</div>
-                                    <div style="width: 80px;">{{form2.hinban}}</div>
+                                    <button id="trade_jan_btn">確認</button>
                                 </div>
                                 <div class="flex">
-                                    <div>型番:</div>
-                                    <div style="width: 80px;">{{form2.kataban}}</div>
+                                    <label for="trade_hinban" style="margin-left: 20px">品番:</label>
+                                    <input class="form-control" type="text" id="trade_hinban" style="width: 130px;margin-left: 10px;">
                                 </div>
-                            </div>
-                            <div style="margin-left: 15px;">
-                                <button class="btn btn-primary" type="submit">登録</button>
-                            </div>
+                                <div class="flex">
+                                    <button class="btn btn-primary" id="trade_hinban_toroku" type="submit">登録</button>
+                                </div>
+                            </div>                            
                         </form>
-                            <div class="reset_btn">
-                                <a href="{% url 'master_kanri' %}"><button class="btn btn-secondary">リセット</button></a>
-                            </div>
+                            
                     </div>
       
                 </div>
-            </div> -->
+            </div>
 
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+  
+        var csrftoken = getCookie('csrftoken');
+  
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+  
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+  
+  
+  
+        //確認
+        $('#trade_jan_btn').on('click', function(e) {
+            e.preventDefault();
+  
+            $.ajax({
+                'url': '{% url "trade_hinban_ajax" %}',
+                'type': 'POST',
+                'data': {
+                    'trade_jan': $('#trade_jan').val(),
+                },
+                'dataType': 'json'
+            })
+            .done(function(response){
+                var comment='<p class="mt-2" style="color: red;">' + response.comment + '</p>';
+                var hinban=response.hinban;
+                document.getElementById("trade_hinban_comment").innerHTML=comment; 
+                document.getElementById("trade_hinban").value=hinban;               
+            });
+        });
+
+        // 登録
+        $('#trade_hinban_toroku').on('click', function(e) {
+            e.preventDefault();
+  
+            $.ajax({
+                'url': '{% url "trade_hinban2_ajax" %}',
+                'type': 'POST',
+                'data': {
+                    'trade_jan': $('#trade_jan').val(),
+                    'trade_hinban': $('#trade_hinban').val(),
+                },
+                'dataType': 'json'
+            })
+            .done(function(response){
+                var comment='<p class="mt-2" style="color: red;">' + response.comment + '</p>';
+                document.getElementById("trade_hinban_comment").innerHTML=comment; 
+                document.getElementById("trade_jan").value="";
+                document.getElementById("trade_hinban").value="";               
+            });
+        });
+    </script>
+
 </body>
 </html>
