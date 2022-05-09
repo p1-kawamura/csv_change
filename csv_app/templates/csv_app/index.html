@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <title>発注CSV変換</title>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <style>
         .title1{
             text-shadow:1.1px 1.1px #808080;
@@ -38,6 +38,13 @@
         }
         #maker_list {
             padding-left: 10px;
+        }
+        .drop_area{
+            border: 0px;
+        }
+        .enter {
+            border: 3px solid gray;
+            border-radius: 10px;
         }
     </style>
 
@@ -82,7 +89,12 @@
                     <a href="https://order.shoeisilk.com/mypage/login.php?transactionid=7e28dac516b0e3754f3db6c5cb3b103b3f40fd1a" target="_blank">松栄シルク</a> / 
                     <a href="https://markless.jp/" target="_blank">トレードワークス</a>
                 </label>
-                <input class="form-control form-control-lg"  style="height: 100px;" type="file" id="formFile" name="csv2">
+
+                <div id="app">
+                    <div class="drop_area" @dragenter="dragEnter" @dragleave="dragLeave" :class="{enter: isEnter}">
+                        <input class="form-control form-control-lg"  style="height: 100px;" type="file" id="formFile" name="csv2">
+                    </div>
+                </div>
             </div>
             <div class="flex-all">
 
@@ -107,6 +119,23 @@
         </form>
 
         <!-- JavaScript -->
+        <script>
+            const app = new Vue({
+                el: "#app",
+                data: {
+                    isEnter: false
+                },
+                methods: {
+                    dragEnter() {
+                        this.isEnter = true;
+                    },
+                    dragLeave() {
+                        this.isEnter = false;
+                    },
+                }
+            })
+        </script>
+
         <script>
             document.getElementById("maker_list").style.display="none";
             document.getElementById("mess").style.visibility="visible";
