@@ -47,7 +47,7 @@ def csv_import(request):
         filename=str(file)
         maker_list=["キャブ(株)","トムス(株)","フェリック(株)","(株)ボンマックス","株式会社松栄シルク","(株)トレードワークス"]
 
-        if (filename=="keep_order.csv" and request.POST["メーカー"]=="(株)トレードワークス") or (filename.split("_")[0]=="(株)トレードワークス" and filename.split("_")[1]=="顧客指定" ):
+        if ("keep_order" in filename and request.POST["メーカー"]=="(株)トレードワークス") or (filename.split("_")[0]=="(株)トレードワークス" and filename.split("_")[1]=="顧客指定" ):
             file="(株)トレードワークス在庫確認専用.csv"
             filename="(株)トレードワークス在庫確認_株式会社プラスワンインターナショナル 物流センター"
             select_maker="(株)トレードワークス"
