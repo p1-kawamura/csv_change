@@ -116,7 +116,7 @@ def csv_import(request):
             ex_csv=[]
 
             for line in csv_list:
-                a=[line[0],line[3],line[5],line[6]]
+                a=[line[0],str(line[3]).zfill(3),str(line[5]).zfill(3),line[6]]
                 ex_csv.append(a)
 
 
