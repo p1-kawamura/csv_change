@@ -56,6 +56,9 @@
             align-items: center;
             margin-bottom: 1em;
         }
+        #syudou .flex-all{
+            align-items: flex-start;
+        }
         .flex{
             display: flex;
             flex-wrap: wrap;
@@ -173,7 +176,7 @@
             </div>
 
             <!-- 手動方式 -->
-            <div class="back2 mt-4">
+            <div id="syudou" class="back2 mt-4">
                 <h2>【品番】 手動登録 / 修正</h2>
                 <hr>              
                 <div style="margin-left: 5px;">
@@ -185,16 +188,21 @@
                             <div class="flex-all">
                                 <div class="flex">
                                     <label for="trade_jan">JANコード:</label>
-                                    <input class="form-control" type="text" id="trade_jan" style="width: 170px;margin-left: 10px;">
+                                    <input class="form-control" type="text" id="trade_jan" style="width: 170px;margin:0 10px;">
+                                        <button id="trade_jan_btn">確認</button>
+
                                 </div>
+
                                 <div class="flex">
-                                    <button id="trade_jan_btn">確認</button>
+                                    <div style="margin-top: -5px;">
+                                        <div class="flex">
+                                        <label for="trade_hinban" style="margin-left: 20px">品番:</label>
+                                        <input class="form-control" type="text" id="trade_hinban" style="width: 130px;margin-left: 10px;">
+                                        </div>
+                                     <div style="text-align: right;">（例：TS-1719-044）</div>
+                                    </div>
                                 </div>
-                                <div class="flex">
-                                    <label for="trade_hinban" style="margin-left: 20px">品番:</label>
-                                    <input class="form-control" type="text" id="trade_hinban" style="width: 130px;margin-left: 10px;">
-                                </div>
-                                <div class="flex">
+                                <div>
                                     <button class="btn btn-primary" id="trade_hinban_toroku" type="submit">登録</button>
                                 </div>
                             </div>                            
