@@ -80,7 +80,7 @@ def csv_import(request):
 
         elif select_maker == "トムス(株)":
             maker="TOMS"
-            ex_csv=[["品番","カラーコード","サイズコード","数量","OPP袋同送数","備考","お客様注文Ｎｏ"]]
+            ex_csv=[["品番(5桁)","カラーコード","サイズコード","数量","備考（納品書・出荷案内書の行備考）","お客様注文Ｎｏ．"]]
 
             for line in csv_list:
 
@@ -89,7 +89,7 @@ def csv_import(request):
                 else:
                     hinban=line[0]
                 
-                a=[hinban,line[3],line[5],line[6],"",line[11][:20],line[7]]
+                a=[hinban,line[3],line[5],line[6],line[11][:20],line[7]]
                 ex_csv.append(a)
 
 
