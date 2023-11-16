@@ -76,6 +76,7 @@ def csv_import(request):
                     item=Master.objects.get(jan=line[8])
                     a=[str(item.hinban)+"0"+str(item.kataban),line[3],line[5],line[6]]
                     ex_csv.append(a)
+                    print(item.hinban,item.kataban,item.jan)
                 
 
         elif select_maker == "トムス(株)":
