@@ -105,7 +105,7 @@ def csv_import(request):
 
         elif select_maker == "(株)ボンマックス":
             maker="ボンマックス"
-            ex_csv=[["品番","カラー","サイズ","個数","明細摘要"]]
+            ex_csv=[["品番","カラー","サイズ","数量","明細摘要"]]
 
             for line in csv_list:
                 a=[line[0],line[3],line[5],line[6],line[11][:20]]
