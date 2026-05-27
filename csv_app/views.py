@@ -64,8 +64,6 @@ def csv_import(request):
                 select_maker=request.POST["メーカー"]
             else:
                 select_maker=filename.split("_")[0]
-
-        print(select_maker)
         
 
         #--- エラー表示用 ---
@@ -86,7 +84,6 @@ def csv_import(request):
                     item=Master.objects.get(jan=line[8])
                     a=[str(item.hinban)+"0"+str(item.kataban),line[3],line[5],line[6]]
                     ex_csv.append(a)
-                    print(item.hinban,item.kataban,item.jan)
                 
 
         elif select_maker == "トムス(株)":
@@ -189,9 +186,15 @@ def csv_import(request):
                     flag=False
             
             if flag == True:
+                # ASCII 0x21〜0x7E（!〜~）を全角にする変換テーブル
+                table = str.maketrans(
+                    ''.join(chr(i) for i in range(0x21, 0x7F)),
+                    ''.join(chr(i + 0xFEE0) for i in range(0x21, 0x7F))
+                )
                 for line in csv_list:
+                    zenkaku=unicodedata.normalize("NFKC", line[11]).translate(table)
                     ins=Koyo.objects.get(hinban=line[0],color_name=line[2],size_name=line[4])
-                    a=[line[0],ins.color_code,ins.size_code,line[6],unicodedata.normalize("NFKC",line[11])[:12]]
+                    a=[line[0],ins.color_code,ins.size_code,line[6],zenkaku[:12]]
                     ex_csv.append(a)
 
 
@@ -447,7 +450,6 @@ def trade_hinban2_ajax(request):
     else:
         Trade_hinban(jan=jan,hinban=hinban).save()
         d={"comment":"新規JANと品番を登録しました！"}
-    print(d)
     return JsonResponse(d)
 
 
