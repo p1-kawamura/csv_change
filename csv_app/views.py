@@ -2,11 +2,14 @@ from django.shortcuts import render,redirect
 import io
 import csv
 from django.http import HttpResponse
-from .models import Master,Trade_hinban,Trade_kyoten
+from .models import Master,Trade_hinban,Trade_kyoten,Koyo
 import urllib.parse
 from django.contrib import messages
 from .forms import Masterform
 from django.http import JsonResponse
+import openpyxl
+from openpyxl import Workbook
+from openpyxl.styles import numbers
 
 
 
@@ -426,3 +429,68 @@ def trade_hinban2_ajax(request):
         d={"comment":"新規JANと品番を登録しました！"}
     print(d)
     return JsonResponse(d)
+
+
+
+def koyo_download(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "item"
+    ws.append(["ID", "品番", "カラー", "カラーコード", "サイズ", "サイズコード"])
+
+    # データ行
+    for k in Koyo.objects.all():
+        ws.append([
+            k.item_id,
+            k.hinban,
+            k.color_name,
+            k.color_code,
+            k.size_name,
+            k.size_code,
+        ])
+
+    # --- D列（color_code）と F列（size_code）を文字列書式に設定 ---
+    for row in ws.iter_rows(min_row=2):
+        row[3].number_format = numbers.FORMAT_TEXT   # D列
+        row[5].number_format = numbers.FORMAT_TEXT   # F列
+
+    # HTTPレスポンスで返す
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = 'attachment; filename="koyo.xlsx"'
+
+    wb.save(response)
+    return response
+
+
+
+def koyo_upload(request):
+
+    file=request.FILES.get("xlsx")
+
+    wb = openpyxl.load_workbook(file, data_only=True)
+    ws = wb["item"]  # item シートを指定
+
+    # 2行目から最終行までループ
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        item_id, hinban, color_name, color_code, size_name, size_code = row
+    
+    # 2行目から最終行までループ
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        item_id, hinban, color_name, color_code, size_name, size_code = row
+
+        # item_id をキーに更新 or 新規作成
+        Koyo.objects.update_or_create(
+            item_id=item_id,
+            defaults={
+                "item_id":item_id,
+                "hinban": hinban,
+                "color_name": color_name,
+                "color_code": color_code,
+                "size_name": size_name,
+                "size_code": size_code,
+            }
+        )
+
+    d={}
+    return JsonResponse(d)
+

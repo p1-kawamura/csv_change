@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import index,csv_import,csv_export,master_kanri,master,master2,master3,trade_hinban,trade_kyoten,trade_hinban_ajax,trade_hinban2_ajax
+from .views import index,csv_import,csv_export,master_kanri,master,master2,master3,trade_hinban,trade_kyoten,trade_hinban_ajax,trade_hinban2_ajax, \
+                    koyo_download,koyo_upload
 
 urlpatterns = [
     path('', index, name="index"),
@@ -13,4 +14,6 @@ urlpatterns = [
     path('trade_kyoten/', trade_kyoten, name="trade_kyoten"),
     path('trade_hinban_ajax/', trade_hinban_ajax, name="trade_hinban_ajax"),
     path('trade_hinban2_ajax/', trade_hinban2_ajax, name="trade_hinban2_ajax"),
+    path('koyo_download/', koyo_download, name="koyo_download"),
+    path('koyo_upload/', koyo_upload, name="koyo_upload"),
 ]

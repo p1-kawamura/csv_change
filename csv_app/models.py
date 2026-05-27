@@ -40,3 +40,14 @@ class Trade_kyoten(models.Model):
     def __str__(self):
         return self.name
 
+
+class Koyo(models.Model):
+    item_id=models.CharField("ID",max_length=255)
+    hinban=models.CharField("品番",max_length=255)
+    color_name=models.CharField("カラー",max_length=255)
+    color_code=models.CharField("カラーコード",max_length=255)
+    size_name=models.CharField("サイズ",max_length=255)
+    size_code=models.CharField("サイズコード",max_length=255)
+
+    def __str__(self):
+        return self.item_id
