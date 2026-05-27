@@ -10,6 +10,7 @@ from django.http import JsonResponse
 import openpyxl
 from openpyxl import Workbook
 from openpyxl.styles import numbers
+import unicodedata
 
 
 
@@ -52,7 +53,7 @@ def csv_import(request):
         #------出力項目準備(リストの中身)------
         file=request.FILES['csv2']
         filename=str(file)
-        maker_list=["キャブ(株)","トムス(株)","フェリック(株)","(株)ボンマックス","株式会社松栄シルク","(株)トレードワークス"]
+        maker_list=["キャブ(株)","トムス(株)","フェリック(株)","(株)ボンマックス","株式会社松栄シルク","(株)トレードワークス","広洋物産株式会社"]
 
         if ("KeepOrder" in filename and request.POST["メーカー"]=="(株)トレードワークス") or (filename.split("_")[0]=="(株)トレードワークス" and filename.split("_")[1]=="顧客指定" ):
             file="(株)トレードワークス在庫確認専用.csv"
@@ -63,6 +64,8 @@ def csv_import(request):
                 select_maker=request.POST["メーカー"]
             else:
                 select_maker=filename.split("_")[0]
+
+        print(select_maker)
         
 
         #--- エラー表示用 ---
@@ -175,6 +178,23 @@ def csv_import(request):
                         ]
                     ex_csv.append(a)
 
+        
+        elif select_maker == "広洋物産株式会社":
+            maker="広洋物産"
+            ex_csv=[["品番","カラーコード","サイズコード","数量","備考"]]
+
+            for line in csv_list:
+                if len(list(Koyo.objects.filter(hinban=line[0],color_name=line[2],size_name=line[4]))) == 0:
+                    err.append(line[8])
+                    flag=False
+            
+            if flag == True:
+                for line in csv_list:
+                    ins=Koyo.objects.get(hinban=line[0],color_name=line[2],size_name=line[4])
+                    a=[line[0],ins.color_code,ins.size_code,line[6],unicodedata.normalize("NFKC",line[11])[:12]]
+                    ex_csv.append(a)
+
+
         # else:
         #     messages.error(request,"対応していないメーカーのCSVが選択されています！")
         #     return render(request,"csv_app/index.html",{"filename":filename})
@@ -193,15 +213,15 @@ def csv_import(request):
 
         else:
             reset="NO"
-            err_mess="マスタに登録されていない商品が含まれています！河野まで連絡してください。"
+            err_mess="マスタに登録されていない商品が含まれています！"
 
             if maker=="トレードワークス":
                 if trade_flag1 == False and trade_flag2 == True:
-                    err_mess="マスタに登録されていない商品が含まれています！河野まで連絡してください。"
+                    err_mess="マスタに登録されていない商品が含まれています！"
                 elif trade_flag1 == True and trade_flag2 == False:
-                    err_mess="ファイル名に登録されていない加工場が含まれています！河野まで連絡してください。"
+                    err_mess="ファイル名に登録されていない加工場が含まれています！"
                 elif trade_flag1 == False and trade_flag2 == False:
-                    err_mess="マスタに登録されていない商品が含まれています！ファイル名に登録されていない加工場が含まれています！河野まで連絡してください。"
+                    err_mess="マスタに登録されていない商品が含まれています！ファイル名に登録されていない加工場が含まれています！"
 
             messages.error(request,err_mess)
 

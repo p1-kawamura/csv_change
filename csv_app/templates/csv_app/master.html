@@ -346,6 +346,7 @@
         document.getElementById("btn_koyo_upload").addEventListener("click",function(){
             var form=document.getElementById("koyo_form");
             var formdata=new FormData(form);
+            document.getElementById("koyo_result").innerText="データ読み込み中・・・";
             $.ajax({
                 'url': '{% url "koyo_upload" %}',
                 'type': 'POST',
