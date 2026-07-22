@@ -26,7 +26,7 @@ SECRET_KEY = '1vi7g4=!vm+371$wo&l_&bbxadw3h^kbvij7ux(abmixkb3zxb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -123,3 +123,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 	
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
+
+
+# ※朝日町サーバー起動
+# waitress-serve --listen=192.168.91.55:8000 --threads 20 csv_change.wsgi:application
